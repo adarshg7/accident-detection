@@ -1,0 +1,23 @@
+# ── CORE AI ──────────────────────────────────────────────
+ultralytics==8.3.0       # YOLOv11 lives here (Ultralytics makes v8 AND v11)
+opencv-python==4.10.0.84 # Reads camera frames, draws boxes, saves images
+numpy==1.26.4            # Math arrays — YOLO output IS numpy arrays
+torch==2.3.0             # PyTorch — the deep learning engine YOLO runs on
+torchvision==0.18.0      # PyTorch image utilities
+
+# ── ASYNC & HTTP ─────────────────────────────────────────
+aiohttp==3.9.5           # Async HTTP — sends alerts WITHOUT freezing detection
+aiofiles==23.2.1         # Async file I/O — writing backup files without blocking
+websockets==12.0         # Real-time push to Person 3's dashboard
+
+# ── CONFIG & VALIDATION ──────────────────────────────────
+python-dotenv==1.0.1     # Reads .env file into os.environ
+pydantic==2.7.1          # Validates config values (catches wrong types EARLY)
+pydantic-settings==2.3.4 # Extends pydantic for settings management
+
+# ── LOGGING ──────────────────────────────────────────────
+loguru==0.7.2            # Advanced logging with file rotation and colors
+
+# ── UTILITIES ────────────────────────────────────────────
+requests==2.32.3         # Sync HTTP fallback
+psutil==5.9.8            # System monitoring (CPU, RAM usage)

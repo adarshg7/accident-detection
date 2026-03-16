@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-log.txt
+pip-delete-this-directory.txt
+status.dat
+.installed.cfg
+*.egg
+*.manifest
+*.spec
+
+# Virtual Environment
+accident_env/
+venv/
+ENV/
+
+# Sensitive Data
+.env
+
+# Large Files & Model
+models/
+*.pt
+*.onnx
+*.engine
+
+# Project Specific
+logs/
+screenshots/
+*.mp4
+*.avi
+*.mov
+ accident_detection/
+ 
+# IDEs
+.vscode/
+.idea/
