@@ -21,3 +21,6 @@ loguru==0.7.2            # Advanced logging with file rotation and colors
 # ── UTILITIES ────────────────────────────────────────────
 requests==2.32.3         # Sync HTTP fallback
 psutil==5.9.8            # System monitoring (CPU, RAM usage)
+
+twilio==8.5.0          # Calls, SMS, WhatsApp — all in one library
+requests==2.32.3       # HTTP requests to Mappls API (already installed)
