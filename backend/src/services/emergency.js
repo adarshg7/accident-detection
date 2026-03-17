@@ -149,7 +149,7 @@ class NearbySearchService {
   }
 
   async _mapplsSearch(lat, lon, category, radius) {
-    // Mappls Nearby API using single token
+    // Mappls Nearby API using single static token
     const categoryMap = {
       hospital:     'HOSP',
       police:       'POLS',
@@ -160,13 +160,13 @@ class NearbySearchService {
     const keyword = categoryMap[category] || category;
 
     const r = await axios.get(
-      `https://apis.mappls.com/advancedmaps/v1/${this.mapplsToken}/nearby_search`,
+      `https://search.mappls.com/search/places/nearby/json`,
       {
         params: {
           keywords:    keyword,
           refLocation: `${lat},${lon}`,
-          radius,
-          richData:    true,
+          radius:      radius,
+          access_token: this.mapplsToken,
         },
         timeout: 10000,
       }
@@ -176,10 +176,11 @@ class NearbySearchService {
       .slice(0, 3)
       .map(p => ({
         name:     p.placeName || 'Unknown',
-        phone:    this._formatPhone(p.contactNo || ''),
+        phone:    this._formatPhone(p.mobileNo || p.landlineNo || p.contactNo || p.phone || ''),
         distance: p.distance || 0,
-        lat:      parseFloat(p.latitude),
-        lon:      parseFloat(p.longitude),
+        lat:      parseFloat(p.latitude || 0), // Note: New API often only returns eLoc, not lat/lon
+        lon:      parseFloat(p.longitude || 0),
+        eLoc:     p.eLoc,
       }))
       .filter(p => p.phone);
       // Only keep places that have phone numbers

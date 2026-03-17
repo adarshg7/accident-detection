@@ -4,58 +4,47 @@ require('dotenv').config();
 
 const axios = require('axios');
 
-console.log('Testing Mappls credentials...');
-console.log('Client ID:    ', process.env.MAPPLS_CLIENT_ID?.slice(0,8) + '...');
-console.log('Client Secret:', process.env.MAPPLS_CLIENT_SECRET?.slice(0,6) + '...');
+console.log('Testing Mappls Static API Token...');
 
 async function test() {
   try {
-    // Step 1: Get token
-    const tokenRes = await axios.post(
-      'https://outpost.mappls.com/api/security/oauth/token',
-      new URLSearchParams({
-        grant_type:    'client_credentials',
-        client_id:     process.env.MAPPLS_CLIENT_ID,
-        client_secret: process.env.MAPPLS_CLIENT_SECRET,
-      }),
-      { timeout: 10000 }
-    );
+    const token = process.env.MAPPLS_API_TOKEN;
+    if (!token) {
+      console.log('❌ MAPPLS_API_TOKEN is missing from your .env file');
+      return;
+    }
 
-    const token = tokenRes.data.access_token;
-    console.log('\n✅ Mappls token obtained');
-    console.log('Token preview:', token.slice(0, 20) + '...');
+    console.log('Token preview:', token.slice(0, 8) + '...');
 
-    // Step 2: Test a nearby search
+    // Test a nearby search
     const searchRes = await axios.get(
-      'https://atlas.mappls.com/api/places/nearby/json',
+      `https://search.mappls.com/search/places/nearby/json`,
       {
-        headers: { Authorization: `Bearer ${token}` },
         params: {
-          keywords:    'HOSP',
-          refLocation: '19.0760,72.8777',
+          keywords:    'coffee',
+          refLocation: '28.631460,77.217423', // Using example coordinates for testing
           radius:      3000,
-          richData:    'true',
+          access_token: token,
         },
         timeout: 10000,
       }
     );
 
     const places = searchRes.data.suggestedLocations || [];
-    console.log(`\n✅ Mappls search working`);
-    console.log(`Found ${places.length} hospitals near Mumbai`);
+    console.log(`\n✅ Mappls search completely working!`);
+    console.log(`Found ${places.length} places...`);
     places.slice(0, 3).forEach(p => {
-      console.log(`  → ${p.placeName} | ${p.distance}m | ${p.contactNo || 'no phone'}`);
+      console.log(`  → ${p.placeName} | ${p.distance}m | ${p.mobileNo || p.landlineNo || p.contactNo || 'no phone'}`);
     });
 
   } catch (err) {
-    console.log('\n❌ Mappls FAILED');
+    console.log('\n❌ Mappls Search FAILED');
     console.log('Status:', err.response?.status);
-    console.log('Error: ', err.response?.data || err.message);
+    console.log('Error: ', err.response?.data?.message || err.message);
     console.log('\nFix:');
-    console.log('1. Go to: https://apis.mappls.com');
-    console.log('2. Login → Dashboard → My Projects');
-    console.log('3. Copy Client ID and Client Secret');
-    console.log('4. Paste in backend/.env');
+    console.log('1. Go to your Mappls Dashboard.');
+    console.log('2. Ensure your Default Project generates a valid Static Key.');
+    console.log('3. Assign it to MAPPLS_API_TOKEN in backend/.env');
   }
 }
 
