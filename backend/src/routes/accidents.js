@@ -345,4 +345,32 @@ router.patch('/:id/status', protect, govOnly, approvedOnly, async (req, res) => 
   }
 });
 
+// GET /api/accidents/stats
+router.get('/stats', protect, govOnly, async (req, res) => {
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    // Set to midnight = start of today
+
+    const [todayCount, activeCount, resolvedCount, criticalCount] = await Promise.all([
+      Accident.countDocuments({ timestamp: { $gte: today } }),
+      Accident.countDocuments({ status: { $in: ['detected', 'verified', 'responding'] } }),
+      Accident.countDocuments({ status: 'resolved', timestamp: { $gte: today } }),
+      Accident.countDocuments({ severity: 'CRITICAL', status: { $nin: ['resolved', 'rejected'] } }),
+    ]);
+
+    res.json({
+      success: true,
+      data: {
+        today:    todayCount,
+        active:   activeCount,
+        resolved: resolvedCount,
+        critical: criticalCount,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
 module.exports = router;

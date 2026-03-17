@@ -58,7 +58,13 @@ screenshots/
 
 # ── Node Modules ──────────────────────────────────
 node_modules/
-*/node_modules/
+npm-debug.log
+yarn-error.log
+build/
+dist/
+.pnp
+.pnp.js
+coverage/
 
 screenshots/
 # Accident screenshots (sensitive + large)
@@ -97,3 +103,34 @@ backend/uploads/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# =========================
+# 3. Secrets & Environment Variables
+# =========================
+# CRITICAL: Never push .env files to GitHub!
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# =========================
+# 4. Uploads & Database
+# =========================
+# Ignore uploaded screenshots from the AI or Users
+backend/uploads/
+uploads/
+*.sqlite3
+
+# =========================
+# 5. OS & Editor Files
+# =========================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

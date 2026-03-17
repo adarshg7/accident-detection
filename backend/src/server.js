@@ -6,7 +6,7 @@ const { Server }  = require('socket.io');
 const path        = require('path');
 const morgan      = require('morgan');
 const compression = require('compression');
-
+const { connectRedis } = require('./config/redis');
 const connectDB      = require('./config/db');
 const setupSocket    = require('./socket/socketHandler');
 const security       = require('./middleware/security');
@@ -76,7 +76,7 @@ app.use((err, req, res, next) => {
 const startServer = async () => {
   await connectDB();
   // Redis commented out — install Redis later
-  // await connectRedis();
+  await connectRedis();
 
   const PORT = process.env.PORT || 5000;
   server.listen(PORT, () => {
