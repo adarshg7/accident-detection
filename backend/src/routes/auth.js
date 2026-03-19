@@ -319,12 +319,13 @@ router.post('/logout', protect, async (req, res) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
     if (token) {
-      const redis = getClient();
-      // Add token to blacklist in Redis
-      await redis.setEx(`blacklist:${token}`, 7 * 24 * 60 * 60, '1');
-      // setEx(key, seconds, value)
-      // 7 * 24 * 60 * 60 = 7 days in seconds
-      // Keep blacklisted until token would have expired anyway
+      try {
+        const redis = getClient();
+        await redis.setEx(`blacklist:${token}`, 7 * 24 * 60 * 60, '1');
+      } catch (redisErr) {
+        // Redis unavailable — proceed with logout anyway
+        console.warn('[Auth] Redis unavailable for token blacklist:', redisErr.message);
+      }
     }
     res.json({ success: true, message: 'Logged out successfully.' });
   } catch (error) {
@@ -332,4 +333,94 @@ router.post('/logout', protect, async (req, res) => {
   }
 });
 
-module.exports = router;
+// ═══════════════════════════════════════════════════
+// GOOGLE OAUTH — POST /api/auth/google/callback
+// Frontend sends the Google access_token it got from
+// @react-oauth/google useGoogleLogin. We verify it with
+// Google's userinfo endpoint and create/find the user.
+// ═══════════════════════════════════════════════════
+router.post('/google/callback', authLimiter, async (req, res) => {
+  try {
+    const { token } = req.body;
+    if (!token) {
+      return res.status(400).json({ success: false, message: 'Google token required' });
+    }
+
+    // ── Step 1: Verify with Google userinfo ──────────────────
+    const googleRes = await fetch(
+      `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${token}`
+    );
+
+    if (!googleRes.ok) {
+      return res.status(401).json({ success: false, message: 'Invalid Google token' });
+    }
+
+    const profile = await googleRes.json();
+    // profile contains: sub (Google ID), email, name, picture, email_verified
+
+    if (!profile.email_verified) {
+      return res.status(400).json({ success: false, message: 'Google email not verified' });
+    }
+
+    // ── Step 2: Find or create user ──────────────────────────
+    let user = await User.findOne({ email: profile.email });
+
+    if (!user) {
+      // New Google user — create account automatically
+      user = await User.create({
+        name:         profile.name || profile.email.split('@')[0],
+        email:        profile.email,
+        googleId:     profile.sub,
+        authProvider: 'google',
+        avatar:       profile.picture || '',
+        isEmailVerified: true,
+        // No password for OAuth users
+      });
+    } else {
+      // Existing user — update Google fields if not set
+      if (!user.googleId) {
+        user.googleId     = profile.sub;
+        user.authProvider = 'google';
+        if (profile.picture && !user.avatar) user.avatar = profile.picture;
+        await user.save();
+      }
+    }
+
+    // ── Step 3: Generate JWT and return ─────────────────────
+    const jwtToken = generateToken(user._id, 'user');
+
+    res.json({
+      success: true,
+      token: jwtToken,
+      user: {
+        id:           user._id,
+        name:         user.name,
+        email:        user.email,
+        avatar:       user.avatar,
+        role:         user.role,
+        authProvider: user.authProvider,
+      },
+    });
+
+  } catch (error) {
+    console.error('[Auth] Google login error:', error);
+    res.status(500).json({ success: false, message: 'Google login failed' });
+  }
+});
+
+// PUT /api/auth/user/profile — update name/phone
+router.put('/user/profile', protect, async (req, res) => {
+  try {
+    const { name, phone } = req.body;
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      { name, phone },
+      { new: true, runValidators: true }
+    );
+    res.json({ success: true, user: { id: user._id, name: user.name, email: user.email, phone: user.phone, avatar: user.avatar } });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Update failed' });
+  }
+});
+
+module.exports = router;
