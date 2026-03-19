@@ -9,6 +9,7 @@ import Dashboard  from './pages/Dashboard';
 import Accidents  from './pages/Accidents';
 import LiveCameras from './pages/LiveCameras';
 import Analytics  from './pages/Analytics';
+import Officials  from './pages/Officials';
 
 const Layout = () => {
   const { official, loading } = useAuth();
@@ -35,6 +36,7 @@ const Layout = () => {
           <Route path="/accidents"  element={<Accidents />} />
           <Route path="/cameras"    element={<LiveCameras socket={socket} />} />
           <Route path="/analytics"  element={<Analytics />} />
+          <Route path="/officials"  element={<Officials />} />
           <Route path="*"           element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </main>

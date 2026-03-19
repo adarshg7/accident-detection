@@ -408,18 +408,66 @@ router.post('/google/callback', authLimiter, async (req, res) => {
   }
 });
 
-// PUT /api/auth/user/profile — update name/phone
-router.put('/user/profile', protect, async (req, res) => {
+// ═══════════════════════════════════════════════════
+// ADMIN ROUTES (Gov ONLY) — Manage Officials
+// ═══════════════════════════════════════════════════
+
+// GET /api/auth/gov/officials — List all officials
+router.get('/gov/officials', protect, govOnly, authorize('admin'), async (req, res) => {
   try {
-    const { name, phone } = req.body;
-    const user = await User.findByIdAndUpdate(
-      req.user.id,
-      { name, phone },
+    const officials = await GovOfficial.find().sort({ createdAt: -1 });
+    res.json({ success: true, officials });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to fetch officials' });
+  }
+});
+
+// PATCH /api/auth/gov/approve/:id — Approve an official
+router.patch('/gov/approve/:id', protect, govOnly, authorize('admin'), async (req, res) => {
+  try {
+    const official = await GovOfficial.findById(req.params.id);
+    if (!official) return res.status(404).json({ success: false, message: 'Official not found' });
+
+    official.isApproved = true;
+    official.approvedBy = req.user.id;
+    official.approvedAt = new Date();
+    await official.save();
+
+    res.json({ success: true, message: 'Official approved successfully', official });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Approval failed' });
+  }
+});
+
+// PATCH /api/auth/gov/role/:id — Update official role
+router.patch('/gov/role/:id', protect, govOnly, authorize('admin'), async (req, res) => {
+  try {
+    const { role } = req.body;
+    if (!['official', 'supervisor', 'admin'].includes(role)) {
+      return res.status(400).json({ success: false, message: 'Invalid role' });
+    }
+
+    const official = await GovOfficial.findByIdAndUpdate(
+      req.params.id,
+      { role },
       { new: true, runValidators: true }
     );
-    res.json({ success: true, user: { id: user._id, name: user.name, email: user.email, phone: user.phone, avatar: user.avatar } });
+
+    if (!official) return res.status(404).json({ success: false, message: 'Official not found' });
+    res.json({ success: true, message: 'Role updated', official });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Update failed' });
+  }
+});
+
+// DELETE /api/auth/gov/:id — Remove an official
+router.delete('/gov/:id', protect, govOnly, authorize('admin'), async (req, res) => {
+  try {
+    const official = await GovOfficial.findByIdAndDelete(req.params.id);
+    if (!official) return res.status(404).json({ success: false, message: 'Official not found' });
+    res.json({ success: true, message: 'Official removed' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Deletion failed' });
   }
 });
 
