@@ -50,10 +50,15 @@ const protect = async (req, res, next) => {
 
   try {
     // ── Check if token is blacklisted (logged out) ──────
-    const redis = getClient();
-    const isBlacklisted = await redis.get(`blacklist:${token}`);
-    // When user logs out: we add their token to Redis blacklist
-    // This token is then invalid even though it hasn't expired
+    let isBlacklisted = false;
+    try {
+      const redis = getClient();
+      if (redis && redis.isReady) {
+        isBlacklisted = await redis.get(`blacklist:${token}`);
+      }
+    } catch (redisErr) {
+      // Ignore Redis errors during auth
+    }
 
     if (isBlacklisted) {
       return res.status(401).json({

@@ -82,13 +82,13 @@ const Analytics = () => {
             {/* Daily bar */}
             <div className="card fade-up" style={{ padding: 24, gridColumn: 'span 2' }}>
               <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 20 }}>Daily Accidents</div>
-              <Bar data={barData} options={{ ...opts(), maintainAspectRatio: false }} height={180} />
+              <Bar data={barData} options={opts()} />
             </div>
 
             {/* Hourly line */}
             <div className="card fade-up" style={{ padding: 24, gridColumn: 'span 2', animationDelay: '0.1s' }}>
               <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 20 }}>Hourly Pattern</div>
-              <Line data={lineData} options={{ ...opts(), maintainAspectRatio: false }} height={180} />
+              <Line data={lineData} options={opts()} />
             </div>
 
             {/* Donut */}

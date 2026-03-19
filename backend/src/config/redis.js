@@ -43,22 +43,25 @@ const connectRedis = async () => {
 // Helper functions (cleaner than calling client directly)
 
 const setCache = async (key, value, ttlSeconds = 300) => {
-  // ttlSeconds = Time To Live (how long to keep in cache)
-  // Default: 300 seconds = 5 minutes
-  await client.setEx(key, ttlSeconds, JSON.stringify(value));
-  // setEx = SET with EXpiry
-  // JSON.stringify = convert object to string for storage
+  if (!client || !client.isReady) return;
+  try {
+    await client.setEx(key, ttlSeconds, JSON.stringify(value));
+  } catch (err) { console.warn('[Redis] Cache write failed'); }
 };
 
 const getCache = async (key) => {
-  const data = await client.get(key);
-  return data ? JSON.parse(data) : null;
-  // JSON.parse = convert string back to object
-  // Ternary: return parsed data OR null if not found
+  if (!client || !client.isReady) return null;
+  try {
+    const data = await client.get(key);
+    return data ? JSON.parse(data) : null;
+  } catch (err) { return null; }
 };
 
 const deleteCache = async (key) => {
-  await client.del(key);
+  if (!client || !client.isReady) return;
+  try {
+    await client.del(key);
+  } catch (err) { console.warn('[Redis] Cache delete failed'); }
 };
 
 const getClient = () => client;
