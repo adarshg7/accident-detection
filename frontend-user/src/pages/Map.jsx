@@ -262,10 +262,10 @@ export default function MapView() {
   // Accidents
   const [accidents,    setAccidents]   = useState([]);
   const [selected,     setSelected]    = useState(null);
-  const [radius,       setRadius]      = useState(5000);
+  const [radius,       setRadius]      = useState(10);
   const [sevFilter,    setSevFilter]   = useState('all');
   const [lastRefresh,  setLastRefresh] = useState(null);
-  const [liveOn,       setLiveOn]      = useState(true);
+  const [liveOn,       setLiveOn]      = useState(false);
 
   // Route
   const [origin,       setOrigin]      = useState('');
@@ -494,7 +494,7 @@ export default function MapView() {
         {/* Header */}
         <div style={{ padding:'20px 20px 0', flexShrink:0 }}>
           <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:14 }}>
-            <div style={{ width:40, height:40, borderRadius:12, background:'linear-gradient(135deg,#ef4444,#f97316)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, boxShadow:'0 4px 15px rgba(239,68,68,0.3)' }}>
+            <div style={{ width:40, height:40, borderRadius:12, background:'#ef4444', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, boxShadow:'0 4px 15px rgba(239,68,68,0.3)' }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.3"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4M12 16h.01" strokeLinecap="round"/></svg>
             </div>
             <div style={{ flex:1 }}>

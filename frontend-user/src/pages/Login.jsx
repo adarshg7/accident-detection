@@ -47,8 +47,8 @@ const Login = () => {
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
             </svg>
           </div>
-          <h1 style={S.heroTitle}>SafeRoute</h1>
-          <p style={S.heroSub}>Real-time accident alerts for safer roads</p>
+          <h1 style={S.heroTitle}>Aegis AI</h1>
+          <p style={S.heroSub}>Your City's AI Guardian — Real-time accident detection</p>
 
           <div style={S.stats}>
             {[['AI Detection','YOLOv11 powered'],['Live Alerts','Instant notifications'],['Community','Report & help others']].map(([t,d]) => (

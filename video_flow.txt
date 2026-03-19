@@ -1,0 +1,58 @@
+AEGIS AI - PROJECT DEMO VIDEO FLOW
+==================================
+
+Use this sequence to create a high-impact video of your project in action.
+
+STEP 1: THE HOOK (Title Slide)
+------------------------------
+- Show a professional title: "AEGIS AI: Your City's AI Guardian"
+- Quick tagline: "Detecting Accidents, Dispatching Help, Saving Lives."
+
+STEP 2: THE AI ENGINE (Python Scene)
+------------------------------------
+- Screen-record your Python 'main.py' window.
+- Show the YOLOv11 model detecting normal traffic first.
+- **The Event:** Let the video run until the accident occurs.
+- **Action:** Highlight the red bounding box and the "ACCIDENT DETECTED!" alert appearing on the console.
+- **Narrative:** "Our AI engine uses YOLOv11 to monitor CCTV feeds 24/7. The moment a crash is detected, the system reacts instantly."
+
+STEP 3: THE BRAIN & DISPATCH (Backend Scene)
+--------------------------------------------
+- Switch to your VS Code/Terminal window running the Node.js backend.
+- **Action:** Highlight the logs where it says:
+  * "[Mappls] Found Hospital nearby"
+  * "[Mappls] Found Shop/Business nearby"
+  * "[Twilio] SMS sent to +91..."
+- **Narrative:** "The backend instantly fetches the closest hospitals and nearby shops using the Mappls API and dispatches automated emergency alerts via Twilio."
+
+STEP 4: GOVERNMENT COMMAND (Gov Dashboard Scene)
+------------------------------------------------
+- Show the 'frontend-gov' dashboard in your browser.
+- **Action:** Point to the new accident marker that just appeared on the map.
+- **Action:** Open the sidebar to show the accident stats and heatmap.
+- **Narrative:** "Authorities get a real-time 'heatview' of the city, allowing them to manage resources and track emergency response history."
+
+STEP 5: CITIZEN SAFETY (Public Map Scene)
+------------------------------------------
+- Show the 'frontend-user' map in a separate browser window.
+- **Action:** Zoom in on the accident marker.
+- **Action:** Show the "Traffic Aware" routing trying to navigate away from the incident.
+- **Narrative:** "Citizens are alerted via a live public map, helping them avoid traffic and stay safe while the area is cleared."
+
+STEP 6: COMMUNITY IMPACT (The Final Message)
+--------------------------------------------
+- Show a photo or graphic of a shopkeeper receiving a text.
+- **Narrative:** "By alerting nearby shopkeepers, Aegis AI ensures that the victim gets help from their own neighbors in those first critical seconds."
+
+STEP 7: CONCLUSION
+------------------
+- Final Logo: Aegis AI.
+- Closing text: "Technology that protects. AI that saves."
+- Website/Contact info.
+
+---
+TIPS FOR A GOOD VIDEO:
+1. Use a screen recorder like 'OBS' or 'QuickTime'.
+2. Use smooth transitions between your windows (Alt+Tab).
+3. Record your voice clearly explaining each step as it happens.
+4. Keep it under 3 minutes for maximum impact.

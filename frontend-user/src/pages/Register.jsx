@@ -36,7 +36,7 @@ const Register = () => {
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           </div>
           <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 6 }}>Create Account</h1>
-          <p style={{ fontSize: 14, color: 'var(--muted)' }}>Join the SafeRoute community</p>
+          <p style={{ fontSize: 14, color: 'var(--muted)' }}>Join the Aegis AI community</p>
         </div>
 
         <div className="card" style={{ padding: 28 }}>
