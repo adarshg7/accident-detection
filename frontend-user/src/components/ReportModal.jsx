@@ -112,11 +112,22 @@ const ReportModal = ({ location, onClose, onSuccess }) => {
                 <input className="input" type="number" step="any" placeholder="Longitude" value={form.longitude} onChange={e => setForm(f => ({ ...f, longitude: e.target.value }))} required />
               </div>
             </div>
-            {location && (
-              <button type="button" onClick={() => setForm(f => ({ ...f, latitude: location.lat, longitude: location.lon }))} style={{ marginTop: 8, fontSize: 12, color: 'var(--accent)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-                ⊕ Use my current location
-              </button>
-            )}
+            <button 
+              type="button" 
+              onClick={() => {
+                if (navigator.geolocation) {
+                  navigator.geolocation.getCurrentPosition(
+                    (pos) => setForm(f => ({ ...f, latitude: pos.coords.latitude, longitude: pos.coords.longitude })),
+                    () => toast.error('Failed to get location. Please allow location access.')
+                  );
+                } else {
+                  toast.error('Geolocation is not supported by this browser.');
+                }
+              }} 
+              style={{ marginTop: 8, fontSize: 12, color: 'var(--accent)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+            >
+              ⊕ Use my current location
+            </button>
           </div>
 
           {/* Photo upload */}

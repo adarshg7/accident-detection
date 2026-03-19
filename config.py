@@ -44,7 +44,7 @@ class Settings(BaseSettings):
 
     # ── BACKEND ──────────────────────────────────────────
     backend_url: str = Field(
-        default="http://localhost:5000/api/accident"
+        default="http://localhost:5000/api/accidents"
     )
     backend_ws_url: str = Field(
         default="ws://localhost:5000/ws/live"
@@ -114,6 +114,17 @@ class Settings(BaseSettings):
     screenshot_dir: Path = Field(default=Path("screenshots"))
     # Path type → Pydantic converts string "screenshots" → Path object
     log_dir: Path = Field(default=Path("logs"))
+
+    # ── MAPPLS API ───────────────────────────────────────
+    mappls_client_id: str = Field(default="")
+    mappls_client_secret: str = Field(default="")
+
+    # ── TWILIO ───────────────────────────────────────────
+    twilio_account_sid: str = Field(default="")
+    twilio_auth_token: str = Field(default="")
+    twilio_phone_number: str = Field(default="")
+    police_number: str = Field(default="")
+    ambulance_number: str = Field(default="")
 
     # ── SYSTEM ───────────────────────────────────────────
     log_level: str = Field(default="INFO")

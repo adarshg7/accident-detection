@@ -137,6 +137,36 @@ class AlertSender:
 
         return success
 
+    async def send_emergency_response(self, emergency_result) -> bool:
+        """
+        Send emergency response statistics to Person 2.
+        """
+        if self._session is None:
+            await self.initialize()
+
+        payload = {
+            "accident_id": emergency_result.accident_id,
+            "contacts_reached": emergency_result.total_contacts_reached,
+            "response_time_seconds": emergency_result.response_time_seconds,
+        }
+
+        url = f"{settings.backend_url}/emergency-response"
+
+        try:
+            async with self._session.post(
+                url, json=payload, headers={"X-API-Key": settings.backend_api_key}
+            ) as response:
+                if response.status in (200, 201, 202):
+                    logger.info("Emergency response stats sent.")
+                    return True
+                else:
+                    body = await response.text()
+                    logger.warning(f"Stats send failed {response.status}: {body[:100]}")
+                    return False
+        except Exception as e:
+            logger.warning(f"Stats send exception: {e}")
+            return False
+
     async def _send_with_retry(self, payload: dict) -> bool:
         """
         HTTP POST with exponential backoff retry.

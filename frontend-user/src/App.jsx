@@ -1,5 +1,5 @@
 // ── App.jsx — Root router + context providers ─────────────────────────────
-import React from 'react';
+import React, { useState } from 'react';
 import {
   BrowserRouter as Router,
   Routes, Route, Navigate,
@@ -14,10 +14,11 @@ import Register from './pages/Register';
 import MapView  from './pages/Map';
 import Vehicles from './pages/Vehicles';
 import Profile  from './pages/Profile';
+import ReportModal from './components/ReportModal';
 
-// ── Protected: shows Navbar + page, redirects to /login if not authed ──────
 function Protected({ children }) {
   const { user, loading } = useAuth();
+  const [reporting, setReporting] = useState(false);
 
   if (loading) {
     return (
@@ -41,8 +42,14 @@ function Protected({ children }) {
 
   return (
     <>
-      <Navbar />
+      <Navbar onReport={() => setReporting(true)} />
       {children}
+      {reporting && (
+        <ReportModal 
+          onClose={() => setReporting(false)} 
+          onSuccess={() => setReporting(false)} 
+        />
+      )}
     </>
   );
 }

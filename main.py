@@ -403,12 +403,19 @@ class AccidentDetectionSystem:
             # In production (on a server): no display available
             # environment=development in .env controls this
 
-            window_title = (
-                f"Accident Detection | {source_id} | "
-                f"FPS: {self._current_fps:.1f} | "
-                f"Accidents: {self._accident_count}"
+            window_title = f"Accident Detection | {source_id}"
+            
+            # Draw stats on the frame itself instead of the window title
+            import cv2
+            cv2.putText(
+                annotated_frame, 
+                f"FPS: {self._current_fps:.1f} | Accidents: {self._accident_count}", 
+                (10, 30), 
+                cv2.FONT_HERSHEY_SIMPLEX, 
+                0.7, 
+                (0, 255, 0), 
+                2
             )
-            # :.1f = format float to 1 decimal place: 29.97 → "30.0"
 
             cv2.imshow(window_title, annotated_frame)
             # cv2.imshow(window_name, image):
@@ -1010,58 +1017,4 @@ if __name__ == "__main__":
     # If you write tests that import AccidentDetectionSystem,
     # you don't want the entire system starting just from the import.
     # The if guard prevents that.
-    main()
-```
-
----
-
-## Keyboard Shortcuts (While Running)
-```
-# Q  →  Quit (graceful shutdown)
-# S  →  Show current statistics
-# P  →  Pause / Resume processing
-# ```
-
-# ---
-
-## Quick Recap of What This `main.py` Does
-# ```
-# START
-#   ↓
-# validate_setup()     ← checks model, folders, API keys
-#   ↓
-# AccidentDetectionSystem()
-#   ├── MultiCameraProcessor   (cameras ready)
-#   ├── AccidentDetector x N   (one per camera)
-#   ├── AlertSender            (HTTP + WebSocket)
-#   └── EmergencyResponseSystem (Mappls + Twilio)
-#   ↓
-# start()
-#   ├── Thread 4: asyncio loop starts
-#   ├── HTTP session initialized
-#   └── Camera threads started
-#   ↓
-# run()  ← MAIN LOOP
-#   ├── get_frames() generator → one frame per camera
-#   ├── _process_frame()
-#   │     ├── add to ring buffer
-#   │     ├── frame skip check
-#   │     ├── YOLOv11 detect()
-#   │     ├── show in window
-#   │     └── IF ACCIDENT:
-#   │           ├── get location
-#   │           ├── emergency.handle_accident()
-#   │           │     ├── Mappls → find nearby places
-#   │           │     ├── Twilio → call police (100)
-#   │           │     ├── Twilio → call ambulance (108)
-#   │           │     ├── Twilio → SMS hospitals
-#   │           │     └── Twilio → WhatsApp stores
-#   │           └── sender.send_alert() → Person 2
-#   └── Q / Ctrl+C → stop()
-#   ↓
-# stop()
-#   ├── cameras.stop()
-#   ├── destroyAllWindows()
-#   ├── sender.close()
-#   ├── loop.stop()
-#   └── print final stats
+    main()
