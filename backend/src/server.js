@@ -13,6 +13,7 @@ const security       = require('./middleware/security');
 
 const authRoutes     = require('./routes/auth');
 const accidentRoutes = require('./routes/accidents');
+const vehicleRoutes = require('./routes/vehicles');
 
 const app    = express();
 const server = http.createServer(app);
@@ -40,6 +41,7 @@ app.use(compression());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(morgan('dev'));
+app.use('/api/vehicles', vehicleRoutes);
 
 // ── Static Files ──────────────────────────────────
 app.use('/screenshots',

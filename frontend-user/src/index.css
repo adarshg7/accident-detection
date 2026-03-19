@@ -59,6 +59,12 @@ body {
 .b-HIGH     { background: rgba(251,133,0,0.12);  color: #fb8500; }
 .b-CRITICAL { background: rgba(230,57,70,0.15);  color: #e63946; }
 
+/* Accident status badges */
+.b-status-active   { background: rgba(230,57,70,0.12);  color: #e63946; }
+.b-status-verified { background: rgba(67,97,238,0.12);  color: #4361ee; }
+.b-status-resolved { background: rgba(45,198,83,0.12);  color: #2dc653; }
+.b-status-pending  { background: rgba(244,162,97,0.12); color: #f4a261; }
+
 /* Cards */
 .card {
   background: var(--surface);

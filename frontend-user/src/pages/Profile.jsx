@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
+
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import api from '../services/api';
@@ -48,7 +48,6 @@ const Profile = () => {
   return (
     <div style={{ minHeight: '100vh' }}>
       <Toaster position="top-right" toastOptions={{ style: { background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)' } }} />
-      <Navbar connected={connected} onReport={() => navigate('/map')} />
 
       <div style={{ maxWidth: 600, margin: '0 auto', padding: '24px 20px' }}>
         {/* Avatar header */}
