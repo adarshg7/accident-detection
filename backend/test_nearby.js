@@ -13,7 +13,7 @@ async function testNearbySearch() {
   const keywords = process.argv[2] || 'coffee'; 
   const refLocation = '28.631460,77.217423'; // New Delhi coordinates from example
 
-  console.log(`🔎 Searching Mappls Nearby for: "${keywords}" near ${refLocation}...\n`);
+  console.log(`Searching Mappls Nearby for: "${keywords}" near ${refLocation}...\n`);
 
   try {
     const response = await axios.get(

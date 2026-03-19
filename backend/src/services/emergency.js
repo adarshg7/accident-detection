@@ -160,13 +160,17 @@ class NearbySearchService {
     const keyword = categoryMap[category] || category;
 
     const r = await axios.get(
-      `https://search.mappls.com/search/places/nearby/json`,
+      `https://atlas.mappls.com/api/places/nearby/json`,
       {
         params: {
           keywords:    keyword,
           refLocation: `${lat},${lon}`,
           radius:      radius,
-          access_token: this.mapplsToken,
+          richData:    'true',
+          region:      'IND',
+        },
+        headers: {
+          Authorization: `Bearer ${this.mapplsToken}`
         },
         timeout: 10000,
       }
@@ -471,13 +475,13 @@ function buildCallMessage(accident, lat, lon) {
     `${accident.description}. ` +
     `Location: latitude ${lat.toFixed(4)}, longitude ${lon.toFixed(4)}. ` +
     `Immediate response required. ` +
-    `This is an automated alert from Sentinel Accident Detection System.`
+    `This is an automated alert from Aegis AI Accident Detection System.`
   );
 }
 
 function buildSMSMessage(accident, mapsLink, screenshotUrl) {
   let msg =
-    `🚨 ACCIDENT ALERT - Sentinel System\n` +
+    `🚨 ACCIDENT ALERT - Aegis AI\n` +
     `━━━━━━━━━━━━━━━━━━━━\n` +
     `Severity : ${accident.severity}\n` +
     `Details  : ${accident.description}\n` +

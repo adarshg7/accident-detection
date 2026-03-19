@@ -262,10 +262,10 @@ export default function MapView() {
   // Accidents
   const [accidents,    setAccidents]   = useState([]);
   const [selected,     setSelected]    = useState(null);
-  const [radius,       setRadius]      = useState(10);
+  const [radius,       setRadius]      = useState(5000);
   const [sevFilter,    setSevFilter]   = useState('all');
   const [lastRefresh,  setLastRefresh] = useState(null);
-  const [liveOn,       setLiveOn]      = useState(false);
+  const [liveOn,       setLiveOn]      = useState(true);
 
   // Route
   const [origin,       setOrigin]      = useState('');
@@ -498,7 +498,7 @@ export default function MapView() {
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.3"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4M12 16h.01" strokeLinecap="round"/></svg>
             </div>
             <div style={{ flex:1 }}>
-              <div style={{ fontSize:16, fontWeight:800, color:'#f3f4f6', letterSpacing:.3 }}>SENTINEL</div>
+              <div style={{ fontSize:16, fontWeight:800, color:'#f3f4f6', letterSpacing:.3 }}>AEGIS AI</div>
               <div style={{ fontSize:10, color:'rgba(255,255,255,0.25)', marginTop:1 }}>
                 Traffic · Routing · Heatmap
               </div>

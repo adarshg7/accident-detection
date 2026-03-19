@@ -33,7 +33,7 @@ const Sidebar = ({ connected, onMobileClose }) => {
           </svg>
         </div>
         <div>
-          <div style={S.brandName}>SENTINEL</div>
+          <div style={S.brandName}>AEGIS AI</div>
           <div style={S.brandSub}>Gov Control</div>
         </div>
         {onMobileClose && (

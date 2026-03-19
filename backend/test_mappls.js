@@ -1,5 +1,4 @@
-// test_mappls.js
-// node test_mappls.js
+
 require('dotenv').config();
 
 const axios = require('axios');
@@ -21,9 +20,9 @@ async function test() {
       `https://search.mappls.com/search/places/nearby/json`,
       {
         params: {
-          keywords:    'coffee',
+          keywords: 'coffee',
           refLocation: '28.631460,77.217423', // Using example coordinates for testing
-          radius:      3000,
+          radius: 3000,
           access_token: token,
         },
         timeout: 10000,
